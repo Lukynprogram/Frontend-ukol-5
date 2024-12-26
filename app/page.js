@@ -4,6 +4,7 @@ import { useState } from 'react';
 import ShoppingListGrid from './lists/components/ShoppingListGrid';
 import AddListModal from './lists/components/AddListModal';
 import { shoppingLists, addNewList } from './mockData';
+import ThemeToggle from './lists/components/ThemeToggle';
 
 const ListsPage = () => {
   const [lists, setLists] = useState(Object.values(shoppingLists));
@@ -58,10 +59,11 @@ const ListsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-2">
         <h1 className="text-2xl font-bold">Shopping Lists</h1>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             onClick={() => setIsAddModalOpen(true)}
@@ -79,17 +81,9 @@ const ListsPage = () => {
         </div>
       </div>
 
-      {loading && (
-        <div className="text-center text-gray-300">
-          Loading...
-        </div>
-      )}
+      {loading && <div className="text-center text-gray-500">Loading...</div>}
 
-      {error && (
-        <div className="text-center text-red-500 mb-4">
-          {error}
-        </div>
-      )}
+      {error && <div className="text-center text-red-500 mb-4">{error}</div>}
 
       <ShoppingListGrid
         lists={lists.filter((list) => showAll || !list.archived)}
