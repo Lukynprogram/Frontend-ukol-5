@@ -163,7 +163,11 @@ const ShoppingListDetail = ({ list }) => {
           className="bg-gray-700 text-white p-2 rounded flex-grow"
         />
       ) : (
-        <h1 className="list-name text-2xl font-bold flex-grow">{currentList.name}</h1>
+        <h1 className="list-name text-2xl font-bold flex-grow">
+          {currentList.name.length > 10
+            ? `${currentList.name.slice(0, 10)}...`
+            : currentList.name}
+        </h1>
       )}
     </div>
       <div className="flex items-center gap-4">
