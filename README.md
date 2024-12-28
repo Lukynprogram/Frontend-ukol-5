@@ -13,7 +13,7 @@ Na zaklade doporuceni jsem implementoval UserContext.js, abych handloval uzivate
 
 **Pokud uživatel nemá oprávnění, tak dostane hlášku, že nemá práva!**
 
-![image](https://github.com/user-attachments/assets/59568e0a-f199-4a04-8f52-73d7e122bec8)
+![image](https://github.com/user-attachments/assets/60e77029-11b1-4141-8fd9-02cc0c3cec98)
 
 V souboru jsou zároveň vyrobené 2 testovací listy.
 http://localhost:3000/lists/1
