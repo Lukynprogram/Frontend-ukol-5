@@ -13,13 +13,18 @@ export const ThemeProvider = ({ children }) => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     setTheme(savedTheme);
     document.documentElement.classList.add(savedTheme);
+  
+    return () => {
+      document.documentElement.classList.remove(savedTheme);
+    };
   }, []);
-
+  
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     document.documentElement.classList.remove(theme);
-    document.documentElement.classList.add(newTheme); 
+    document.documentElement.classList.add(newTheme);
     setTheme(newTheme);
+    console.log('Theme applied:', newTheme);
     localStorage.setItem('theme', newTheme);
   };
 

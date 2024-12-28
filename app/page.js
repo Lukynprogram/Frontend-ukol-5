@@ -5,6 +5,8 @@ import ShoppingListGrid from './lists/components/ShoppingListGrid';
 import AddListModal from './lists/components/AddListModal';
 import { shoppingLists, addNewList } from './mockData';
 import ThemeToggle from './lists/components/ThemeToggle';
+import { useLanguage } from './context/LanguageContext';
+import LanguageSwitcher from './lists/components/LanguageSwitcher';
 
 const ListsPage = () => {
   const [lists, setLists] = useState(Object.values(shoppingLists));
@@ -12,6 +14,7 @@ const ListsPage = () => {
   const [showAll, setShowAll] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { translations } = useLanguage();
 
   const handleAddList = async (newList) => {
     setLoading(true);
@@ -61,22 +64,25 @@ const ListsPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-6">
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-2">
-        <h1 className="text-2xl font-bold">Shopping Lists</h1>
+        <h1 className="text-2xl font-bold">{translations.shoppingLists}</h1>
         <div className="flex items-center gap-2">
           <ThemeToggle />
+          <LanguageSwitcher />
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             onClick={() => setIsAddModalOpen(true)}
           >
-            Add New List
+            {translations.addNewList}
           </button>
           <button
-            className={`px-4 py-2 rounded ${
-              showAll ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-500 hover:bg-gray-600'
+            className={`px-4 py-2 rounded text-white ${
+              showAll
+                ? 'bg-blue-500 hover:bg-blue-600'
+                : 'bg-gray-500 hover:bg-gray-600'
             }`}
             onClick={() => setShowAll((prev) => !prev)}
           >
-            {showAll ? 'Hide Archived' : 'Show All'}
+            {showAll ? translations.hideArchived : translations.showAll}
           </button>
         </div>
       </div>

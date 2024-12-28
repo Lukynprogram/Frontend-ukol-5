@@ -3,9 +3,13 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useUser } from '../../context/UserContext';
+import ThemeToggle from '../../lists/components/ThemeToggle';
+import LanguageSwitcher from '../../lists/components/LanguageSwitcher';
+import { useLanguage } from '../../context/LanguageContext';
 
 const ShoppingListDetail = ({ list }) => {
-  const { currentUser } = useUser(); // Fetch current user from context
+  const { currentUser } = useUser();
+  const { translations } = useLanguage();
   const [currentList, setCurrentList] = useState({ ...list });
   const [filterResolved, setFilterResolved] = useState(false);
   const [newItem, setNewItem] = useState({ name: '', quantity: 1 });
@@ -23,10 +27,10 @@ const ShoppingListDetail = ({ list }) => {
   const isOwner = currentList.owner === currentUser;
   const isMember = currentList.members.includes(currentUser);
   
-  if (!isOwner && !isMember) {
+  if (!isOwner) {
     return (
       <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-        <h1 className="text-3xl font-bold">Permissions Denied</h1>
+        <h1 className="text-3xl font-bold">{translations.permissionsDenied}</h1>
       </div>
     );
   }
@@ -141,26 +145,28 @@ const ShoppingListDetail = ({ list }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-        <Link href="/">
-            <img
-              src="/hack.png"
-              alt="Hack Logo"
-              className="w-8 h-8 object-contain cursor-pointer hover:opacity-75"
-            />
-          </Link>
-          {editingName ? (
-            <input
-              value={editedName}
-              onChange={(e) => setEditedName(e.target.value)}
-              className="bg-gray-700 text-white p-2 rounded"
-            />
-          ) : (
-            <h1 className="text-3xl font-bold">{currentList.name}</h1>
-          )}
-        </div>
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-6">
+    {/* Header */}
+    <div className="flex items-center justify-between w-full">
+    <div className="flex items-center gap-2">
+      <Link href="/">
+        <img
+          src="/hack.png"
+          alt="Hack Logo"
+          className="logo w-12 h-12 object-contain cursor-pointer hover:opacity-75 flex-shrink-0"
+        />
+      </Link>
+      {editingName ? (
+        <input
+          value={editedName}
+          onChange={(e) => setEditedName(e.target.value)}
+          className="bg-gray-700 text-white p-2 rounded flex-grow"
+        />
+      ) : (
+        <h1 className="list-name text-2xl font-bold flex-grow">{currentList.name}</h1>
+      )}
+    </div>
+      <div className="flex items-center gap-4">
         {isOwner && (
           <div className="hidden lg:flex gap-2">
             {editingName ? (
@@ -169,7 +175,7 @@ const ShoppingListDetail = ({ list }) => {
                   className="flex-1 bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
                   onClick={editListName}
                 >
-                  Save Name
+                  {translations.saveName}
                 </button>
                 <button
                   className="flex-1 bg-red-500 px-4 py-2 rounded hover:bg-red-600"
@@ -178,7 +184,7 @@ const ShoppingListDetail = ({ list }) => {
                     setEditingName(false);
                   }}
                 >
-                  Discard
+                  {translations.discardChanges}
                 </button>
               </div>
             ) : (
@@ -186,20 +192,25 @@ const ShoppingListDetail = ({ list }) => {
                 className="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
                 onClick={() => setEditingName(true)}
               >
-                Edit Name
+                {translations.editName}
               </button>
             )}
           </div>
         )}
-        <button
-          className="lg:hidden bg-gray-700 p-2 rounded"
-          onClick={() => setShowMobileMenu(!showMobileMenu)}
-        >
-          <span className="block w-6 h-1 bg-white mb-1"></span>
-          <span className="block w-6 h-1 bg-white mb-1"></span>
-          <span className="block w-6 h-1 bg-white"></span>
-        </button>
+        <div className="flex items-center gap-4 sm:gap-2">
+          <ThemeToggle className="mr-2 sm:mr-4" />
+          <LanguageSwitcher />
+        </div>
       </div>
+      <button
+        className="burger-menu bg-gray-700 p-2 rounded lg:hidden"
+        onClick={() => setShowMobileMenu(!showMobileMenu)}
+      >
+        <span className="block w-6 h-1 bg-white mb-1"></span>
+        <span className="block w-6 h-1 bg-white mb-1"></span>
+        <span className="block w-6 h-1 bg-white"></span>
+      </button>
+    </div>
 
 {/* Mobile */}
 {showMobileMenu && (
@@ -212,7 +223,7 @@ const ShoppingListDetail = ({ list }) => {
               className="flex-1 bg-blue-500 px-4 py-2 rounded hover:bg-blue-600"
               onClick={editListName}
             >
-              Save list name
+              {translations.saveName}
             </button>
             <button
               className="flex-1 bg-red-500 px-4 py-2 rounded hover:bg-red-600"
@@ -221,22 +232,22 @@ const ShoppingListDetail = ({ list }) => {
                 setEditingName(false);
               }}
             >
-              Discard changes
+              {translations.discardChanges}
             </button>
           </div>
         ) : (
           <button
-            className="w-full px-4 py-2 bg-blue-500 rounded hover:bg-blue-600"
+            className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             onClick={() => setEditingName(true)}
           >
-            Edit list name
+            {translations.editName}
           </button>
         )}
       </>
     )}
     {selectedItems.length === 1 && (
       <button
-        className="w-full px-4 py-2 bg-yellow-500 rounded hover:bg-yellow-600"
+        className="w-full px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
         onClick={() => {
           const selectedItem = currentList.items.find((item) => selectedItems.includes(item.id));
           if (selectedItem) {
@@ -245,28 +256,28 @@ const ShoppingListDetail = ({ list }) => {
           }
         }}
       >
-        Edit Item
+        {translations.editItem}
       </button>
     )}
     {selectedItems.length > 0 && (
       <>
         <button
-          className="w-full px-4 py-2 bg-green-500 rounded hover:bg-green-600"
+          className="w-full px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
           onClick={markItemsCompleted}
         >
-          Mark as Completed
+          {translations.markAsCompleted}
         </button>
         <button
-          className="w-full px-4 py-2 bg-red-500 rounded hover:bg-red-600"
+          className="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
           onClick={deleteSelectedItems}
         >
-          Delete Item
+          {translations.deleteItem}
         </button>
         <button
-          className="w-full px-4 py-2 bg-gray-500 rounded hover:bg-gray-600"
+          className="w-full px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
           onClick={() => setSelectedItems([])}
         >
-          Unselect All
+          {translations.unselectAll}
         </button>
       </>
     )}
@@ -275,11 +286,11 @@ const ShoppingListDetail = ({ list }) => {
 {showAddItemPopup && (
   <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
     <div className="bg-white p-6 rounded shadow-lg text-gray-900">
-      <h2 className="text-xl font-bold mb-4">Add Item</h2>
+      <h2 className="text-xl font-bold mb-4">{translations.addItem}</h2>
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <input
         type="text"
-        placeholder="Name"
+        placeholder={translations.name}
         value={newItem.name}
         onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
         className="block w-full p-2 mb-4 border rounded"
@@ -298,13 +309,13 @@ const ShoppingListDetail = ({ list }) => {
           className="px-4 py-2 mr-2 bg-gray-500 text-white rounded hover:bg-gray-600"
           onClick={cancelAddItem}
         >
-          Cancel
+          {translations.cancel}
         </button>
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           onClick={addItem}
         >
-          Save
+          {translations.save}
         </button>
       </div>
     </div>
@@ -337,13 +348,13 @@ const ShoppingListDetail = ({ list }) => {
           className="px-4 py-2 mr-2 bg-gray-500 text-white rounded hover:bg-gray-600"
           onClick={cancelEditItem}
         >
-          Cancel
+          {translations.cancel}
         </button>
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           onClick={editSelectedItem}
         >
-          Save
+          {translations.save}
         </button>
       </div>
     </div>
@@ -355,7 +366,7 @@ const ShoppingListDetail = ({ list }) => {
     <div className="hidden lg:flex flex-wrap gap-4 mt-6">
     {selectedItems.length === 1 && (
     <button
-      className="px-4 py-2 bg-yellow-500 rounded hover:bg-yellow-600"
+      className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
       onClick={() => {
         const selectedItem = currentList.items.find((item) => selectedItems.includes(item.id));
         if (selectedItem) {
@@ -364,28 +375,28 @@ const ShoppingListDetail = ({ list }) => {
         }
       }}
     >
-      Edit Item
+      {translations.editItem}
     </button>
   )}
     {selectedItems.length > 0 && (
     <>
       <button
-        className="px-4 py-2 bg-green-500 rounded hover:bg-green-600"
+        className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
         onClick={markItemsCompleted}
       >
-        Mark as Completed
+        {translations.markAsCompleted}
       </button>
       <button
-        className="px-4 py-2 bg-red-500 rounded hover:bg-red-600"
+        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
         onClick={deleteSelectedItems}
       >
-        Delete Item
+        {translations.deleteItem}
       </button>
       <button
-        className="px-4 py-2 bg-gray-500 rounded hover:bg-gray-600"
+        className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
         onClick={() => setSelectedItems([])}
       >
-        Unselect All
+        {translations.unselectAll}
       </button>
     </>
   )}
@@ -395,7 +406,7 @@ const ShoppingListDetail = ({ list }) => {
   <div className="flex items-center justify-between mb-4">
     <div className="flex items-center">
       <h2 className="text-xl font-bold flex items-center">
-        Items
+        {translations.items}
           <button
             className="ml-2 text-white bg-green-500 rounded-full p-2 hover:bg-green-600"
             onClick={() => setShowAddItemPopup(true)}
@@ -417,25 +428,25 @@ const ShoppingListDetail = ({ list }) => {
       </h2>
     </div>
     <button
-      className={`px-4 py-2 rounded ${
+      className={`px-4 py-2 rounded text-white ${
         filterResolved ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-500 hover:bg-gray-600'
       }`}
       onClick={() => setFilterResolved((prev) => !prev)}
     >
-      {filterResolved ? 'Show All Items' : 'Show Only Unresolved'}
+      {filterResolved ? translations.showAllItems : translations.showOnlyUnresolved}
     </button>
   </div>
 
   <div className="overflow-x-auto">
     <table className="w-full border-collapse border border-gray-700">
-      <thead>
-        <tr className="bg-gray-800">
-          <th className="border border-gray-700 px-1 py-2 w-10 text-center">Select</th>
-          <th className="border border-gray-700 px-2 py-2 w-20 text-center">Quantity</th>
-          <th className="border border-gray-700 px-4 py-2">Product Name</th>
-          <th className="border border-gray-700 px-1 py-2 w-10 text-center">Resolved</th>
-        </tr>
-      </thead>
+    <thead>
+      <tr className="bg-gray-800 text-white">
+        <th className="border border-gray-700 px-1 py-2 w-10 text-center">Select</th>
+        <th className="border border-gray-700 px-2 py-2 w-20 text-center">{translations.quantity}</th>
+        <th className="border border-gray-700 px-4 py-2">{translations.productName}</th>
+        <th className="border border-gray-700 px-1 py-2 w-10 text-center">{translations.resolved}</th>
+      </tr>
+    </thead>
       <tbody>
         {currentList.items
           .filter((item) => (filterResolved ? !item.resolved : true))
@@ -472,12 +483,11 @@ const ShoppingListDetail = ({ list }) => {
   </div>
 </div>
 
-<div className="min-h-screen bg-gray-900 text-white p-6">
-<div className="mt-6">
+<div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-6"><div className="mt-6">
 <div className="flex items-center justify-between mb-4">
   <div className="flex items-center">
     <h2 className="text-xl font-bold flex items-center">
-      Members
+      {translations.members}
       {isOwner && (
         <button
           className="ml-2 text-white bg-green-500 rounded-full p-2 hover:bg-green-600"
@@ -505,7 +515,7 @@ const ShoppingListDetail = ({ list }) => {
       className="ml-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
       onClick={leaveList}
     >
-      Leave List
+      {translations.leavelist}
     </button>
   )}
 </div>
@@ -514,10 +524,10 @@ const ShoppingListDetail = ({ list }) => {
     <table className="w-full border-collapse border border-gray-700 text-sm">
       <thead>
         <tr className="bg-gray-800 text-white">
-          <th className="border border-gray-700 px-4 py-2 text-left">Name</th>
-          <th className="border border-gray-700 px-4 py-2 text-left">Role</th>
+          <th className="border border-gray-700 px-4 py-2 text-left">{translations.name}</th>
+          <th className="border border-gray-700 px-4 py-2 text-left">{translations.role}</th>
           {isOwner && (
-            <th className="border border-gray-700 px-4 py-2 text-left">Actions</th>
+            <th className="border border-gray-700 px-4 py-2 text-left">{translations.actions}</th>
           )}
         </tr>
       </thead>
@@ -526,12 +536,12 @@ const ShoppingListDetail = ({ list }) => {
           <tr key={member} className="bg-gray-100 text-gray-900">
             <td className="border border-gray-700 px-4 py-2">{member}</td>
             <td className="border border-gray-700 px-4 py-2">
-              {member === currentList.owner ? 'Owner' : 'Member'}
+              {member === currentList.owner ? translations.owner : translations.member}
             </td>
             {isOwner && (
               <td className="border border-gray-700 px-4 py-2">
                 {member === currentList.owner ? (
-                  <span className="text-sm text-gray-500">Owner cannot remove themselves</span>
+                  <span className="text-sm text-gray-500">{translations.ownerdelete}</span>
                 ) : (
                   <button
                     className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
@@ -558,10 +568,10 @@ const ShoppingListDetail = ({ list }) => {
       {showAddMemberPopup && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded shadow-lg text-gray-900">
-            <h2 className="text-xl font-bold mb-4">Add New Member</h2>
+            <h2 className="text-xl font-bold mb-4">{translations.addNewMember}</h2>
             <input
               type="text"
-              placeholder="Member Name"
+              placeholder={translations.membername}
               value={newMember}
               onChange={(e) => setNewMember(e.target.value)}
               className="block w-full p-2 mb-4 border rounded"
@@ -571,13 +581,13 @@ const ShoppingListDetail = ({ list }) => {
                 className="px-4 py-2 mr-2 bg-gray-500 text-white rounded hover:bg-gray-600"
                 onClick={() => setShowAddMemberPopup(false)}
               >
-                Cancel
+                {translations.cancel}
               </button>
               <button
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                 onClick={addMember}
               >
-                Save
+                {translations.save}
               </button>
             </div>
           </div>
@@ -591,7 +601,7 @@ const ShoppingListDetail = ({ list }) => {
       className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-600"
       onClick={() => setShowAddItemPopup(true)}
     >
-      Add New Member
+      {translations.addNewMember}
     </button>
   </div>
 )}

@@ -2,19 +2,22 @@
 
 import Link from 'next/link';
 import { useUser } from '../../context/UserContext';
+import { useLanguage } from '../../context/LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const ListTile = ({ list, onDelete, onArchive }) => {
   const { currentUser } = useUser();
   const isOwner = currentUser === list.owner;
+  const { translations } = useLanguage();
 
   const handleDelete = () => {
-    if (confirm(`Are you sure you want to delete the list "${list.name}"?`)) {
+    if (confirm(`${translations.sure} ${translations.deletelist} "${list.name}"?`)) {
       onDelete(list.id);
     }
   };
 
   const handleArchive = () => {
-    if (confirm(`Are you sure you want to ${list.archived ? 'unarchive' : 'archive'} the list "${list.name}"?`)) {
+    if (confirm(`${translations.sure} ${list.archived ? translations.unarchive : translations.archive} list "${list.name}"?`)) {
       onArchive(list.id);
     }
   };
@@ -26,10 +29,10 @@ const ListTile = ({ list, onDelete, onArchive }) => {
           {list.name}
         </Link>
       </h3>
-      <p>Owner: {list.owner}</p>
-      <p>Members: {list.members.join(', ')}</p>
+      <p>{translations.owner}: {list.owner}</p>
+      <p>{translations.member}: {list.members.join(', ')}</p>
       <p className={`mt-2 text-sm font-semibold ${list.archived ? 'text-red-500' : 'text-green-500'}`}>
-        {list.archived ? 'Archived' : 'Active'}
+        {list.archived ? translations.archived : translations.active}
       </p>
       <div className="flex justify-center mt-4 gap-4">
         <button
@@ -37,14 +40,14 @@ const ListTile = ({ list, onDelete, onArchive }) => {
           onClick={isOwner ? handleArchive : null}
           disabled={!isOwner}
         >
-          {list.archived ? 'Unarchive' : 'Archive'}
+          {list.archived ? translations.unarchive : translations.archive}
         </button>
         <button
           className={`flex-1 px-4 py-2 rounded ${isOwner ? 'bg-red-500 hover:bg-red-600 text-white' : 'bg-gray-500 text-gray-300 cursor-not-allowed'}`}
           onClick={isOwner ? handleDelete : null}
           disabled={!isOwner}
         >
-          Delete
+          {translations.delete}
         </button>
       </div>
     </div>

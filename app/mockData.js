@@ -12,7 +12,7 @@ export const shoppingLists = {
     },
     '2': {
       id: '2',
-      name: 'Computer parts',
+      name: 'Computer',
       owner: 'Lukas Jonak',
       members: ['Lukas Jonak'],
       archived: true,
@@ -47,7 +47,3 @@ export const shoppingLists = {
       items: [],
     };
   }
-  
-
-  
-  

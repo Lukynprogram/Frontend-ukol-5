@@ -3,20 +3,103 @@
 @tailwind utilities;
 
 html {
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 html.light {
-  background-color: #ffffff;
+  background-color: #ffffff !important;
   color: #000000;
 }
 
 html.dark {
-  background-color: #121212; 
+  background-color: #121212 !important;
   color: #ffffff; 
 }
 
 body {
   margin: 0;
   font-family: Arial, sans-serif;
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  .theme-toggle {
+    margin-right: 1rem;
+  }
+
+  .language-switcher {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  img {
+    max-width: 100%;
+  }
+}
+
+.logo {
+  max-width: 3rem;
+  height: auto;
+  object-fit: contain;
+  margin: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .header {
+    flex-wrap: wrap;
+  }
+}
+
+.list-name {
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 640px) {
+  .list-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 3rem);
+  }
+}
+
+.burger-menu {
+  position: relative;
+  right: 0;
+  z-index: 10;
+}
+
+@media (max-width: 640px) {
+  .burger-menu {
+    padding: 0.5rem;
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+@media (max-width: 640px) {
+  th, td {
+    font-size: 0.875rem;
+  }
 }
