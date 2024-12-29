@@ -55,6 +55,7 @@ const translations = {
     addNewShoppingList: "Add New Shopping List",
     listName: "List Name",
     addList: "Add",
+    showAllItems: "Show all items",
   },
   cs: {
     permissionsDenied: 'Přístup odepřen',
@@ -104,6 +105,7 @@ const translations = {
     addNewShoppingList: "Přidat nový nákupní seznam",
     listName: "Název seznamu",
     addList: "Přidat",
+    showAllItems: "Zobrazit vše",
   },
 };
 
