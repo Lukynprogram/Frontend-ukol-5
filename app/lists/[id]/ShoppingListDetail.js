@@ -598,18 +598,6 @@ const ShoppingListDetail = ({ list }) => {
         </div>
       )}
     </div>
-
-{isOwner && (
-  <div className="mt-6">
-    <button
-      className="px-4 py-2 bg-blue-500 rounded hover:bg-blue-600"
-      onClick={() => setShowAddItemPopup(true)}
-    >
-      {translations.addNewMember}
-    </button>
-  </div>
-)}
-
     </div>
   );
 };
